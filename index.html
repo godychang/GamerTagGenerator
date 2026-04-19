@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TagForge V6.2 | Logic Restored</title>
+    <title>TagForge V6.4 | Massive Dictionary Update</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Bangers&family=JetBrains+Mono:wght@400;800&display=swap" rel="stylesheet">
     <style>
@@ -17,7 +17,6 @@
         .glow-green { color: var(--hardcore-primary); text-shadow: 0 0 15px rgba(57, 255, 20, 0.7); }
         .glow-purple { color: var(--troll-primary); text-shadow: 0 0 20px rgba(168, 85, 247, 0.8); }
 
-        /* 布局：保持加长版防止遮挡 */
         .main-wrapper { display: flex; flex-direction: column; width: 100%; }
         .hero-viewport { 
             position: relative; 
@@ -33,7 +32,6 @@
         .bg-hardcore { background: radial-gradient(circle at center, #16421a 0%, #081a0a 45%, #050505 100%); }
         .bg-troll { background: radial-gradient(circle at center, #3b0764 0%, #2e1065 45%, #050505 100%); }
 
-        /* 卡片：保持 V6.0 调浅后的背景色 */
         .result-card { 
             background: rgba(255, 255, 255, 0.12); 
             border: 2px solid rgba(255, 255, 255, 0.15); 
@@ -110,16 +108,25 @@
         <section class="seo-section">
             <div class="seo-content">
                 <h2 class="text-zinc-200 mb-6 font-bold text-xl uppercase tracking-widest">The Premium Gamertag Generator</h2>
-                <p>TagForge is a professional <strong>gamertag generator</strong> designed for high-stakes gaming. Use our <strong>gamertag generator</strong> to forge unique identities for Xbox, PSN, and Steam. Whether you need a <strong>cool gamertag generator</strong> or a <strong>funny gaming name generator</strong>, our system delivers results in milliseconds.</p>
+                <p>TagForge is a professional <strong>gamertag generator</strong> for tactical gaming identities. Use our <strong>gamertag generator</strong> for Xbox, PSN, and Steam. Whether for a <strong>cool gamertag generator</strong> or a <strong>funny gaming name generator</strong>, we deliver in milliseconds.</p>
                 <p class="mt-10 opacity-30 text-xs">© 2026 TAGFORGE. COLD LOGIC. BOLD NAMES.</p>
             </div>
         </section>
     </div>
 
     <script>
+        // 核心更新：20-25个词/类
         const DICT = {
-            h: { p: ['VORTEX', 'NOMAD', 'CIPHER', 'GHOST', 'REAPER'], c: ['SENTINEL', 'WRAITH', 'BREACH', 'ALLOY'], s: ['ALPHA', 'KILO', 'PRIME', 'MK2'] },
-            t: { a: ['Sweaty', 'Confused', 'Aggressive', 'Lazy', 'Moist'], i: ['Hamster', 'Toaster', 'Banana', 'Muffin'], h: ['PhD', 'CEO', 'Enjoyer', 'Pro'] }
+            h: { 
+                p: ['VORTEX', 'NOMAD', 'CIPHER', 'GHOST', 'REAPER', 'SPECTRE', 'ZENITH', 'AXIOM', 'ONYX', 'VECTOR', 'PHANTOM', 'IRON', 'COBALT', 'APEX', 'RADAR', 'QUASAR', 'KINETIC', 'NEON', 'TITAN', 'FROST', 'ECHO', 'STATIC', 'CARBON', 'OMEGA', 'VOID'],
+                c: ['SENTINEL', 'WRAITH', 'BREACH', 'ALLOY', 'CORE', 'STRIKE', 'BLADE', 'PULSE', 'SHIELD', 'VOID', 'SHADOW', 'TITAN', 'GEAR', 'CELL', 'LINK', 'BARRAGE', 'PROTOCOL', 'MATRIX', 'SYSTEM', 'FAULT', 'ENGINE', 'HYDRA', 'VALVE', 'PIVOT', 'FLUX'],
+                s: ['ALPHA', 'KILO', 'PRIME', 'MK2', 'ZERO', 'X', 'SIGMA', 'OMEGA', 'PROTOTYPE', 'DELTA', 'ONE', 'ELITE', 'VOID', 'CORE', 'ULTRA', 'ACTUAL', 'NODE', 'V1', 'V2', 'ORIGIN', 'LIMIT', 'NULL', 'REDACTED', 'BINARY', 'ECHO']
+            },
+            t: { 
+                a: ['Sweaty', 'Confused', 'Aggressive', 'Lazy', 'Moist', 'Salty', 'Clumsy', 'Toxic', 'Sleepy', 'Fancy', 'Broken', 'Glitched', 'Spicy', 'Chonky', 'Cursed', 'Unlucky', 'Smelly', 'Lost', 'Angry', 'Famous', 'Useless', 'Rich', 'Sad', 'Tiny', 'Wiggly'],
+                i: ['Hamster', 'Toaster', 'Banana', 'Muffin', 'Potato', 'Chicken', 'Keyboard', 'Nugget', 'Cactus', 'Pigeon', 'Spoon', 'Waffle', 'Burrito', 'Llama', 'Duck', 'Fridge', 'Pickle', 'Sock', 'Baguette', 'Taco', 'Mop', 'Chair', 'Pizza', 'Donut', 'Pancake'],
+                h: ['PhD', 'CEO', 'Enjoyer', 'Pro', 'Expert', 'Main', 'Bot', 'Simp', 'Lord', 'King', 'Master', 'Noob', 'God', 'Dealer', 'Fan', 'Hater', 'Watcher', 'Gamer', 'Legend', 'Noob', 'Intern', 'Manager', 'Troll', 'Owner', 'Staff']
+            }
         };
 
         const RULES = {
@@ -156,7 +163,6 @@
                 const card = document.createElement('div');
                 card.className = "result-card p-5 rounded-2xl text-left cursor-pointer group animate-in fade-in slide-in-from-bottom-2 duration-300";
                 
-                // 纯白收藏五角星与 Click to copy 引导
                 card.innerHTML = `
                     <div class="flex justify-between items-center mb-3">
                         <span class="${mode === 'h' ? 'font-mono text-lg text-white' : 'font-troll text-2xl text-purple-100'}">${name}</span>
