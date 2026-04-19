@@ -3,131 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>TagForge | Ultimate Gamertag Generator for Xbox, PSN & Steam</title>
-    <meta name="description" content="Looking for the best gamertag generator? Forge unique, cool, and funny gaming IDs for Xbox, PlayStation, and Steam with TagForge.">
-    
+    <title>TagForge V6.2 | Logic Restored</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Bangers&family=JetBrains+Mono:wght@800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Bangers&family=JetBrains+Mono:wght@400;800&display=swap" rel="stylesheet">
     <style>
         :root { --hardcore-primary: #39ff14; --troll-primary: #f0abfc; }
-        body { background-color: #050505; margin: 0; overflow-x: hidden; color: white; }
+        body { background-color: #050505; margin: 0; color: white; font-family: sans-serif; overflow-x: hidden; }
+        
         .font-hardcore { font-family: 'Orbitron', sans-serif; }
         .font-troll { font-family: 'Bangers', cursive; }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* 面板逻辑锁死 */
-        .expand-panel { transition: all 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); flex: 1; overflow: hidden; position: relative; min-height: 100vh; }
-        .expand-panel:hover { flex: 1.4; }
-        .bg-hardcore { background: radial-gradient(circle at center, #16421a 0%, #081a0a 45%, #050505 100%); }
-        .bg-troll { background: radial-gradient(circle at center, #3b0764 0%, #2e1065 45%, #050505 100%); }
-
-        /* 关键色调复位：恢复荧光绿与霓虹紫 */
         .glow-green { color: var(--hardcore-primary); text-shadow: 0 0 15px rgba(57, 255, 20, 0.7); }
         .glow-purple { color: var(--troll-primary); text-shadow: 0 0 20px rgba(168, 85, 247, 0.8); }
 
-        /* 组件视觉锁死 */
-        .result-card { background: rgba(255, 255, 255, 0.06); border: 2px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); transition: all 0.3s ease; position: relative; }
+        /* 布局：保持加长版防止遮挡 */
+        .main-wrapper { display: flex; flex-direction: column; width: 100%; }
+        .hero-viewport { 
+            position: relative; 
+            min-height: 115vh; 
+            display: flex; 
+            width: 100%; 
+            flex-shrink: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .expand-panel { transition: all 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding-bottom: 100px; }
+        .expand-panel:hover { flex: 1.2; }
+        .bg-hardcore { background: radial-gradient(circle at center, #16421a 0%, #081a0a 45%, #050505 100%); }
+        .bg-troll { background: radial-gradient(circle at center, #3b0764 0%, #2e1065 45%, #050505 100%); }
+
+        /* 卡片：保持 V6.0 调浅后的背景色 */
+        .result-card { 
+            background: rgba(255, 255, 255, 0.12); 
+            border: 2px solid rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(18px); 
+            transition: all 0.3s ease; 
+            width: 100%; 
+            max-width: 380px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
         .tag { font-size: 11px; font-weight: 900; padding: 3px 7px; border-radius: 4px; margin-right: 5px; }
         .tag-on { background: var(--hardcore-primary); color: black; }
         .tag-off { background: #222; color: #555; text-decoration: line-through; }
         
-        #vault { position: absolute; top: 200px; left: 50%; transform: translateX(-50%); width: 260px; z-index: 40; pointer-events: none; }
-        .vault-header { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 800; letter-spacing: 0.2em; color: #555; margin-bottom: 20px; text-transform: uppercase; text-align: center; }
-
-        /* 弹窗通用样式 (Privacy & Feedback) */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        #vault { position: absolute; top: 180px; left: 50%; transform: translateX(-50%); width: 260px; z-index: 40; pointer-events: none; }
         
-        .seo-section { background: #050505; color: #333; padding: 60px 20px; font-family: 'JetBrains Mono', monospace; border-top: 1px solid #111; }
+        .seo-section { 
+            background: rgba(200, 200, 200, 0.15); 
+            backdrop-filter: blur(15px);
+            color: rgba(255, 255, 255, 0.5); 
+            padding: 150px 20px; 
+            font-family: 'JetBrains Mono', monospace;
+            position: relative;
+            z-index: 1;
+            margin-top: -50px;
+        }
+        .seo-content { max-width: 900px; margin: 0 auto; font-size: 14px; line-height: 1.8; }
+
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
     </style>
 </head>
 <body>
 
-    <main class="flex h-screen w-full relative">
-        <section class="expand-panel bg-hardcore flex flex-col items-center justify-center p-10 border-r border-white/5">
-            <div class="relative z-10 w-full max-w-md text-center">
-                <h1 class="font-hardcore text-7xl lg:text-8xl glow-green mb-4">HARDCORE</h1>
-                <p class="font-mono text-sm tracking-widest text-green-400 opacity-80 mb-10 uppercase">Tactical Command Center</p>
-                <button onclick="generate('h')" class="bg-white text-black font-hardcore text-lg px-14 py-4 rounded-md shadow-2xl hover:bg-green-500 transition-all">FORGE NEW ID</button>
-                <div id="results-h" class="mt-16 space-y-5"></div>
+    <div class="main-wrapper">
+        <div class="hero-viewport">
+            <section class="expand-panel bg-hardcore border-r border-white/5">
+                <div class="z-10 text-center w-full max-w-sm mt-20">
+                    <h1 class="font-hardcore text-7xl glow-green mb-4">HARDCORE</h1>
+                    <p class="font-mono text-[10px] tracking-[0.3em] text-green-400 opacity-60 mb-10 uppercase">Tactical Command Center</p>
+                    <button onclick="generate('h')" class="bg-white text-black font-hardcore text-lg px-12 py-4 rounded-md hover:bg-green-500 transition-all active:scale-95">FORGE NEW ID</button>
+                    <div id="results-h" class="mt-12 space-y-4"></div>
+                </div>
+            </section>
+
+            <section class="expand-panel bg-troll">
+                <div class="z-10 text-center w-full max-w-sm mt-20">
+                    <h1 class="font-troll text-9xl glow-purple mb-4 rotate-[-1deg]">TROLL</h1>
+                    <p class="font-mono text-[10px] tracking-[0.3em] text-purple-300 opacity-60 mb-10 uppercase">Chaos Generator Pro</p>
+                    <button onclick="generate('t')" class="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-troll text-4xl px-14 py-4 rounded-2xl hover:brightness-110 transition-all active:scale-95">SURPRISE ME</button>
+                    <div id="results-t" class="mt-12 space-y-4"></div>
+                </div>
+            </section>
+
+            <div class="absolute top-20 left-1/2 -translate-x-1/2 z-50">
+                <div class="bg-zinc-900/90 border-2 border-white/10 p-1 rounded-2xl shadow-2xl">
+                    <input id="keyword" type="text" maxlength="12" placeholder="ENTER SEED WORD" 
+                           class="bg-transparent px-4 py-3 w-52 text-center font-mono text-sm font-bold tracking-[0.1em] focus:outline-none placeholder:text-white text-white uppercase">
+                </div>
+            </div>
+
+            <div id="vault">
+                <div class="font-mono text-[14px] font-extrabold tracking-[0.2em] text-white mb-5 text-center uppercase">Collection</div>
+                <div id="vault-list" class="w-full"></div>
+            </div>
+
+            <div class="absolute bottom-10 left-10 z-50">
+                <button onclick="toggleModal('feedback-modal', true)" class="font-mono text-[10px] text-zinc-600 hover:text-green-500 tracking-widest uppercase">Feedback</button>
+            </div>
+            <div class="absolute bottom-10 right-10 z-50">
+                <button onclick="toggleModal('privacy-modal', true)" class="font-mono text-[10px] text-zinc-600 hover:text-zinc-400 tracking-widest uppercase">Privacy</button>
+            </div>
+        </div>
+
+        <section class="seo-section">
+            <div class="seo-content">
+                <h2 class="text-zinc-200 mb-6 font-bold text-xl uppercase tracking-widest">The Premium Gamertag Generator</h2>
+                <p>TagForge is a professional <strong>gamertag generator</strong> designed for high-stakes gaming. Use our <strong>gamertag generator</strong> to forge unique identities for Xbox, PSN, and Steam. Whether you need a <strong>cool gamertag generator</strong> or a <strong>funny gaming name generator</strong>, our system delivers results in milliseconds.</p>
+                <p class="mt-10 opacity-30 text-xs">© 2026 TAGFORGE. COLD LOGIC. BOLD NAMES.</p>
             </div>
         </section>
-
-        <section class="expand-panel bg-troll flex flex-col items-center justify-center p-10">
-            <div class="relative z-10 w-full max-w-md text-center">
-                <h1 class="font-troll text-8xl lg:text-[10rem] glow-purple mb-4 rotate-[-1deg]">TROLL</h1>
-                <p class="font-mono text-sm tracking-widest text-purple-300 opacity-80 mb-10 uppercase">Chaos Generator Pro</p>
-                <button onclick="generate('t')" class="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-troll text-4xl px-16 py-4 rounded-2xl shadow-2xl">SURPRISE ME</button>
-                <div id="results-t" class="mt-16 space-y-5"></div>
-            </div>
-        </section>
-
-        <div class="absolute top-24 left-1/2 -translate-x-1/2 z-50">
-            <div class="bg-zinc-900/90 border-2 border-white/10 p-1 rounded-2xl">
-                <input id="keyword" type="text" maxlength="12" placeholder="ENTER SEED WORD" 
-                       class="bg-transparent px-4 py-3 w-52 text-center font-mono text-sm font-bold tracking-[0.1em] focus:outline-none focus:text-green-400 uppercase">
-            </div>
-        </div>
-        <div id="vault">
-            <div class="vault-header">COLLECTION</div>
-            <div id="vault-list" class="w-full"></div>
-        </div>
-
-        <div class="absolute bottom-4 left-4 z-50">
-            <button onclick="toggleModal('feedback-modal', true)" class="font-mono text-[10px] text-zinc-600 hover:text-green-500 tracking-widest uppercase">Feedback</button>
-        </div>
-        <div class="absolute bottom-4 right-4 z-50">
-            <button onclick="toggleModal('privacy-modal', true)" class="font-mono text-[10px] text-zinc-600 hover:text-zinc-400 tracking-widest uppercase">Privacy</button>
-        </div>
-    </main>
-
-    <div id="feedback-modal" class="modal">
-        <div class="max-w-md w-full p-8 bg-zinc-900 border border-white/10 rounded-3xl">
-            <h3 class="font-mono text-lg font-bold mb-4 text-green-400 uppercase">Transmit Feedback</h3>
-            <textarea id="fb-text" class="w-full h-32 bg-black border border-white/10 rounded-xl p-4 font-mono text-xs text-zinc-300 focus:outline-none focus:border-green-500" placeholder="Report a bug or suggest a feature..."></textarea>
-            <div class="flex space-x-3 mt-6">
-                <button onclick="toggleModal('feedback-modal', false)" class="flex-1 py-3 bg-zinc-800 text-zinc-400 font-mono font-bold text-xs rounded-xl">CANCEL</button>
-                <button onclick="sendFeedback()" class="flex-1 py-3 bg-white text-black font-mono font-bold text-xs rounded-xl">SEND</button>
-            </div>
-        </div>
     </div>
-
-    <div id="privacy-modal" class="modal">
-        <div class="max-w-md p-8 bg-zinc-900 border border-white/10 rounded-3xl">
-            <h3 class="font-mono text-lg font-bold mb-4 text-green-400">PRIVACY PROTOCOL</h3>
-            <ul class="font-mono text-[11px] space-y-3 text-zinc-400 tracking-tight leading-relaxed uppercase">
-                <li>• No Data Storage: Seed words are never uploaded.</li>
-                <li>• Purely Local: Logic executes in your browser.</li>
-                <li>• No Trackers: Zero cookies or analytics.</li>
-            </ul>
-            <button onclick="toggleModal('privacy-modal', false)" class="mt-8 w-full py-3 bg-white text-black font-mono font-bold text-xs rounded-xl">DISMISS</button>
-        </div>
-    </div>
-
-    <section class="seo-section">
-        <div class="max-w-3xl mx-auto opacity-30 text-[11px] leading-loose font-mono">
-            <h2>The Premium Gamertag Generator</h2>
-            <p>TagForge is a professional <strong>gamertag generator</strong> designed for high-stakes gaming. Use our <strong>gamertag generator</strong> to find unique IDs for Xbox, PSN, and Steam. Whether you need a <strong>cool gamertag generator</strong> or a <strong>funny gaming name generator</strong>, our system delivers high-density <strong>gamertag generator</strong> results in milliseconds.</p>
-        </div>
-    </section>
 
     <script>
         const DICT = {
             h: { p: ['VORTEX', 'NOMAD', 'CIPHER', 'GHOST', 'REAPER'], c: ['SENTINEL', 'WRAITH', 'BREACH', 'ALLOY'], s: ['ALPHA', 'KILO', 'PRIME', 'MK2'] },
             t: { a: ['Sweaty', 'Confused', 'Aggressive', 'Lazy', 'Moist'], i: ['Hamster', 'Toaster', 'Banana', 'Muffin'], h: ['PhD', 'CEO', 'Enjoyer', 'Pro'] }
         };
+
         const RULES = {
             XB: n => n.length <= 12 && /^[A-Z0-9 ]+$/i.test(n),
             PS: n => n.length >= 3 && n.length <= 16 && /^[A-Z][A-Z0-9_-]+$/i.test(n),
             TW: n => n.length >= 4 && n.length <= 25 && /^[A-Z0-9_]+$/i.test(n),
             ST: n => n.length >= 2 && n.length <= 32
         };
+
         let savedItems = [];
 
         function generate(mode) {
             const seed = document.getElementById('keyword').value.trim();
             const container = document.getElementById(`results-${mode}`);
+            if (!container) return; 
+
             container.innerHTML = '';
             for(let i = 0; i < 3; i++) {
                 let name = '';
@@ -141,20 +149,30 @@
                     const a = DICT.t.a[Math.floor(Math.random()*DICT.t.a.length)];
                     const item = seed || DICT.t.i[Math.floor(Math.random()*DICT.t.i.length)];
                     const h = DICT.t.h[Math.floor(Math.random()*DICT.t.h.length)];
-                    name = `${a}_${item}_${h}`;
+                    const sep1 = Math.random() > 0.5 ? '_' : '';
+                    name = `${a}${sep1}${item}${sep1}${h}`;
                 }
+
                 const card = document.createElement('div');
-                card.className = "result-card p-6 rounded-2xl text-left cursor-pointer group animate-in fade-in slide-in-from-bottom-2 duration-300";
+                card.className = "result-card p-5 rounded-2xl text-left cursor-pointer group animate-in fade-in slide-in-from-bottom-2 duration-300";
+                
+                // 纯白收藏五角星与 Click to copy 引导
                 card.innerHTML = `
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="${mode === 'h' ? 'font-mono text-xl text-white' : 'font-troll text-3xl text-purple-100'}">${name}</span>
-                        <div class="flex space-x-3">
-                             <button onclick="event.stopPropagation(); save('${name}', '${mode}')" class="text-zinc-600 hover:text-yellow-400 text-xl">★</button>
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="${mode === 'h' ? 'font-mono text-lg text-white' : 'font-troll text-2xl text-purple-100'}">${name}</span>
+                        <div class="flex items-center space-x-3">
+                            <span class="font-mono text-[8px] text-white/40 tracking-tighter uppercase">Click to copy</span>
+                            <button onclick="event.stopPropagation(); save('${name}', '${mode}')" class="text-white hover:text-yellow-400 text-xl transition-colors">★</button>
                         </div>
                     </div>
                     <div class="flex">${['XB', 'PS', 'TW', 'ST'].map(p => `<span class="tag ${RULES[p](name) ? 'tag-on' : 'tag-off'}">${p}</span>`).join('')}</div>
                 `;
-                card.onclick = () => { navigator.clipboard.writeText(name); alert('ID COPIED'); };
+                card.onclick = () => { 
+                    navigator.clipboard.writeText(name); 
+                    const copyHint = card.querySelector('span.tracking-tighter');
+                    copyHint.innerText = 'COPIED!';
+                    setTimeout(() => copyHint.innerText = 'Click to copy', 1500);
+                };
                 container.appendChild(card);
             }
         }
@@ -166,17 +184,12 @@
                 const item = document.createElement('div');
                 item.className = 'vault-item pointer-events-auto bg-black/80 border border-white/10 p-3 mb-2 rounded-xl text-center shadow-xl';
                 const fontClass = mode === 'h' ? 'text-green-400 font-mono text-sm' : 'text-purple-300 font-troll text-xl';
-                item.innerHTML = `<div class="${fontClass}">${name}</div><div class="text-[8px] text-zinc-600 mt-2 cursor-pointer hover:text-red-500 font-bold" onclick="this.parentElement.remove()">REMOVE</div>`;
+                item.innerHTML = `<div class="${fontClass}">${name}</div><div class="text-[8px] text-zinc-600 mt-2 cursor-pointer hover:text-red-500 font-bold uppercase" onclick="this.parentElement.remove()">Remove</div>`;
                 list.prepend(item);
             }
         }
 
         function toggleModal(id, show) { document.getElementById(id).style.display = show ? 'flex' : 'none'; }
-        
-        function sendFeedback() {
-            const text = document.getElementById('fb-text').value;
-            if(text) { alert('FEEDBACK SENT TO COMMAND CENTER'); toggleModal('feedback-modal', false); document.getElementById('fb-text').value = ''; }
-        }
     </script>
 </body>
 </html>
